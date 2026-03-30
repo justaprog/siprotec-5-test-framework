@@ -15,6 +15,7 @@ Create test case → run simulation → evaluate result → store/report outcome
 8. Final report is returned
 
 ## Architecture
+The system is designed as a set of loosely coupled microservices, each responsible for a specific domain of functionality. The services communicate via RESTful APIs, allowing for scalability and maintainability. The main services include: 
 1. **Test Management Service**:
 This service manages:
 - test case definitions
@@ -44,6 +45,8 @@ This service stores and exposes comprehensive test reports:
 - event logs
 - measurement summaries
 - validation reports
+
+For more details on the functionality and implementation of each service, please go to the respective service documentation and API specifications in each service's README file.
 
 ## Tech Stack
 - C# / .NET 8
