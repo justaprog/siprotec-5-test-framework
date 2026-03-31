@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testmanagement
+    ports:
+      - "5433:5432" # map host port 5433 to container port 5432 to avoid conflict with local PostgreSQL
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
