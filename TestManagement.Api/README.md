@@ -5,6 +5,33 @@ The Test Management Service is the coordinator of the whole framework. It manage
 - execution state
 - links to results from other services
 
+## Getting Started
+### Prerequisites
+- .NET 10 SDK
+- Docker
+
+### Database Setup 
+- EF Core CLI tools: Install the EF Core CLI tools globally if you haven't already:
+```bash
+dotnet tool install --global dotnet-ef
+```
+- Start the PostgreSQL database:
+```bash
+docker compose up -d
+```
+- Apply database migrations to create the necessary tables:
+```bash
+# Create the initial migration and update the database
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+### Running the API 
+- Start the API:
+```bash
+dotnet run dev
+```
+
 ## Key Responsibilities
 - create a test case
 - list test cases
