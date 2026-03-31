@@ -50,7 +50,9 @@ We use Data Transfer Objects (DTOs) to decouple the API layer from the data
 models. This allows us to have more control over the data we expose through 
 the API and to perform any necessary transformations.
 This presents how data is transferred over HTTP:
-- 
+- CreateTestCaseDto: used to create a new test case
+- CreateTestRunDto: used to create a new test run
+- UpdateTestRunResultDto: used to update test run results
 
 ## API Endpoints
 Test cases:
