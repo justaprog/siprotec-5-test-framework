@@ -40,9 +40,17 @@ dotnet run dev
 - get test run status
 - store test run results
 
-## Data Models
+## Architecture
+### Data Models
+This represents how data is stored in the database:
 - TestCase: represents the definition of a test case
 - TestRun: represents an execution of a test case
+### Dtos
+We use Data Transfer Objects (DTOs) to decouple the API layer from the data 
+models. This allows us to have more control over the data we expose through 
+the API and to perform any necessary transformations.
+This presents how data is transferred over HTTP:
+- 
 
 ## API Endpoints
 Test cases:
