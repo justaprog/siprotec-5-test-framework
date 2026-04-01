@@ -110,4 +110,25 @@ public class TestCasesController : ControllerBase
         // the newly created test case
         return CreatedAtAction(nameof(GetById), new { id = testCase.Id }, testCase);
     }
+
+    /// <summary>
+    /// Delete a test case by id
+    /// </summary>
+    /// <param name="id">The id of the test case to delete</param>
+    /// <returns></returns>
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var testCase = await _context.TestCases.FindAsync(id);
+
+        if (testCase == null)
+        {
+            return NotFound();
+        }
+
+        _context.TestCases.Remove(testCase);
+        await _context.SaveChangesAsync();
+        // return HTTP 204 No Content response to indicate successful deletion
+        return NoContent();
+    }
 }
