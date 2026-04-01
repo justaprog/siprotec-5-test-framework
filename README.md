@@ -55,6 +55,8 @@ respective test directory or solution directory for all services:
 ```bash
 dotnet test
 ```
+For more details on the test strategy, scope, and stack for each service, 
+please refer to the README file in each service's test project directory.
 
 ## Tech Stack
 - C# / .NET 8
