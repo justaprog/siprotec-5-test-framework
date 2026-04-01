@@ -56,6 +56,9 @@ This presents how data is transferred over HTTP:
 - CreateTestCaseDto: used to create a new test case
 - CreateTestRunDto: used to create a new test run
 - UpdateTestRunResultDto: used to update test run results
+- TestRunResponseDto: used to return test run details along with the 
+associated test case summary
+- TestCaseSummaryDto: used to return a summary of a test case in the test run response
 
 ## API Endpoints
 Test cases:
