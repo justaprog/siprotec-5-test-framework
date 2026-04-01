@@ -265,4 +265,53 @@ public class TestCasesControllerTests
         Assert.NotNull(saved);
         Assert.Equal("Valid Test", saved!.Name);
     }
+
+    [Fact]
+    public async Task Delete_ReturnsNotFound_WhenTestCaseDoesNotExist()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var controller = new TestCasesController(context);
+
+        // Act
+        var result = await controller.Delete(Guid.NewGuid());
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+    [Fact]
+    public async Task Delete_ReturnsNoContent_WhenTestCaseIsDeleted()
+    {
+        // arrange
+        using var context = CreateContext();
+
+        var id = Guid.NewGuid();
+        var testCase = new TestCase
+        {
+            Id = id,
+            Name = "Test Case to Delete",
+            PickupCurrent = 100,
+            FaultCurrent = 200,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+        // add testcase to database
+        context.TestCases.Add(testCase);
+        await context.SaveChangesAsync();
+
+        // act
+        var controller = new TestCasesController(context);
+        var result = await controller.Delete(id);
+
+        // assert
+        // verify right response type
+        Assert.IsType<NoContentResult>(result);
+        // verify the test case was deleted from the database
+        var deleted = await context.TestCases.FindAsync(id);
+        Assert.Null(deleted);
+        
+    }
 }
