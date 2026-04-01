@@ -34,7 +34,8 @@ dotnet run dev
 
 - The API will be available at `http://localhost:5257`
 and the Swagger UI can be accessed at `http://localhost:5257/swagger`.
-![alt text](../img/swaggerui_interface.png)
+![alt text](../data/imgs//swaggerui_interface.png)
+
 ## Key Responsibilities
 - create a test case
 - list test cases
