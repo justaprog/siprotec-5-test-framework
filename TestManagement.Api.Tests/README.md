@@ -22,3 +22,5 @@ Run all tests from the solution root:
 
 ```bash
 dotnet test
+```
+![alt text](../data/imgs/testcases_unittests.png)
