@@ -32,6 +32,9 @@ dotnet ef database update
 dotnet run dev
 ```
 
+- The API will be available at `http://localhost:5257`
+and the Swagger UI can be accessed at `http://localhost:5257/swagger`.
+
 ## Key Responsibilities
 - create a test case
 - list test cases
@@ -59,11 +62,11 @@ Test cases:
 - POST /api/testcases: create a new test case
 - GET /api/testcases: list all test cases
 - GET /api/testcases/{id}: get details of a specific test case
-- Put /api/testcases/{id}: start a test run for the given test case
+- PUT /api/testcases/{id}: start a test run for the given test case
 - DELETE /api/testcases/{id}: delete a test case
 
 Test runs:
-- POST /api/testruns: create a new test run
+- POST /api/testruns: create a new test run for a given test case
 - GET /api/testruns: list all test runs
 - GET /api/testruns/{id}: get details of a specific test run
 - PATCH /api/testruns/{id}/status: update test run status
