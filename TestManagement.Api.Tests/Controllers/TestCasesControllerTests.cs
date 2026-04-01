@@ -116,4 +116,153 @@ public class TestCasesControllerTests
         // Assert
         Assert.IsType<NotFoundResult>(result.Result);
     }
+
+    [Fact]
+    public async Task Create_ReturnsBadRequest_WhenNameIsMissing()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var controller = new TestCasesController(context);
+
+        var dto = new CreateTestCaseDto
+        {
+            Name = "",
+            PickupCurrent = 100,
+            FaultCurrent = 200,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+
+        // Act
+        var result = await controller.Create(dto);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal("Name is required.", badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsBadRequest_WhenPickupCurrentIsInvalid()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var controller = new TestCasesController(context);
+
+        var dto = new CreateTestCaseDto
+        {
+            Name = "Test Case with Invalid PickupCurrent",
+            PickupCurrent = 0,
+            FaultCurrent = 200,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+
+        // Act
+        var result = await controller.Create(dto);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal("PickupCurrent must be greater than 0.", badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsBadRequest_WhenFaultCurrentNotGreaterThanPickupCurrent()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var controller = new TestCasesController(context);
+
+        var dto = new CreateTestCaseDto
+        {
+            Name = "Test Case with Invalid FaultCurrent",
+            PickupCurrent = 100,
+            FaultCurrent = 50,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+
+        // Act
+        var result = await controller.Create(dto);
+
+        // Assert 
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal("FaultCurrent must be greater than PickupCurrent.", badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsBadRequest_WhenExpectedTripTimeWindowMissing()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var controller = new TestCasesController(context);
+
+        var dto = new CreateTestCaseDto
+        {
+            Name = "Test Case with Missing Expected Trip Time Window",
+            PickupCurrent = 100,
+            FaultCurrent = 200,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = null,
+            ExpectedTripMaxMs = null
+        };
+
+        // Act
+        var result = await controller.Create(dto);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal("Expected trip time window is required when ExpectedTrip is true.", badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsCreatedAndSavesTestCase_WhenInputIsValid()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var controller = new TestCasesController(context);
+
+        var dto = new CreateTestCaseDto
+        {
+            Name = "Valid Test",
+            Description = "Test description",
+            DeviceFamily = "SIPROTEC_5",
+            ProtectionFunction = "Overcurrent",
+            FaultType = "PhaseA",
+            PickupCurrent = 100,
+            FaultCurrent = 300,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+
+        // Act
+        var result = await controller.Create(dto);
+
+        // Assert
+        var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+        var createdTestCase = Assert.IsType<TestCase>(createdResult.Value);
+
+        // verify that the action name in the CreatedAtActionResult is correct
+        // Console.WriteLine($"Output of nameof(TestCasesController.GetById): {nameof(TestCasesController.GetById)}");
+        Assert.Equal(nameof(TestCasesController.GetById), createdResult.ActionName);
+        Assert.Equal("Valid Test", createdTestCase.Name);
+
+        // verify that the test case was actually saved in the database
+        var saved = await context.TestCases.FindAsync(createdTestCase.Id);
+        Assert.NotNull(saved);
+        Assert.Equal("Valid Test", saved!.Name);
+    }
 }
