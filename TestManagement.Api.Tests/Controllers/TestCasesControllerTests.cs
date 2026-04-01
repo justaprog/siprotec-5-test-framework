@@ -68,4 +68,38 @@ public class TestCasesControllerTests
         var testCases = Assert.IsAssignableFrom<IEnumerable<TestCase>>(okResult.Value);
         Assert.Equal(2, testCases.Count());
     }
+
+    [Fact]
+    public async Task GetById_ReturnsOk_WhenTestCaseExists()
+    {
+        // arrange
+        using var context = CreateContext();
+
+        var id = Guid.NewGuid();
+        var testCase = new TestCase
+        {
+            Id = id,
+            Name = "Existing Test 1",
+            PickupCurrent = 100,
+            FaultCurrent = 250,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+
+        context.TestCases.Add(testCase);
+        await context.SaveChangesAsync();
+
+        var controller = new TestCasesController(context);
+
+        // act
+        var result = await controller.GetById(id);
+        
+        // assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var testCaseFound = Assert.IsType<TestCase>(okResult.Value);
+        Assert.Equal(id, testCaseFound.Id);
+    }
 }
