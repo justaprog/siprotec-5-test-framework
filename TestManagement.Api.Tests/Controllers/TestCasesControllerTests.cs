@@ -102,4 +102,18 @@ public class TestCasesControllerTests
         var testCaseFound = Assert.IsType<TestCase>(okResult.Value);
         Assert.Equal(id, testCaseFound.Id);
     }
+
+    [Fact]
+    public async Task GetById_ReturnsNotFound_WhenTestCaseDoesNotExist()
+    {
+        // Arrange
+        using var context = CreateContext();
+        var controller = new TestCasesController(context);
+
+        // Act
+        var result = await controller.GetById(Guid.NewGuid());
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
 }
