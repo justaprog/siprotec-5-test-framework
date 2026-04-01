@@ -48,6 +48,14 @@ This service stores and exposes comprehensive test reports:
 
 For more details on the functionality and implementation of each service, please go to the respective service documentation and API specifications in each service's README file.
 
+## Test
+### Unit tests
+Run unit tests for each service using the following command in the 
+respective test directory or solution directory for all services:
+```bash
+dotnet test
+```
+
 ## Tech Stack
 - C# / .NET 8
 - ASP.NET Core Web API
