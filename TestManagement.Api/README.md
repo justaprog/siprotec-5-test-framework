@@ -60,6 +60,10 @@ This presents how data is transferred over HTTP:
 - TestRunResponseDto: used to return test run details along with the 
 associated test case summary
 - TestCaseSummaryDto: used to return a summary of a test case in the test run response
+### Controllers
+Controllers define the API endpoints and handle HTTP requests. They use the services to perform business logic and return appropriate HTTP responses:
+- TestCasesController: handles endpoints related to test cases
+- TestRunsController: handles endpoints related to test runs
 
 ## API Endpoints
 Test cases:
