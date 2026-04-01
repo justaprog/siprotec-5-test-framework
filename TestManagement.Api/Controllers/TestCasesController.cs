@@ -7,8 +7,7 @@ using TestManagement.Api.Models;
 namespace TestManagement.Api.Controllers;
 
 [ApiController]
-// map to controller name without "Controller" suffix, e.g. "api/testcases"
-[Route("api/[controller]")]
+[Route("api/testcases")]
 public class TestCasesController : ControllerBase
 {
     // inject AppDbContext to access the database
