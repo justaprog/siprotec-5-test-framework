@@ -123,7 +123,6 @@ public class TestRunsController : ControllerBase
             Id = Guid.NewGuid(),
             TestCaseId = dto.TestCaseId,
             Status = TestRunStatus.Pending,
-            StartedAt = DateTime.UtcNow
         };
 
         _context.TestRuns.Add(testRun);
