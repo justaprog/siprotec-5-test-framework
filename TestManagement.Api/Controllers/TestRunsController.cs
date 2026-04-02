@@ -26,7 +26,7 @@ public class TestRunsController : ControllerBase
     /// as HTTP 200 Ok response
     /// </returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TestRun>>> GetAll()
+    public async Task<ActionResult<IEnumerable<TestRunResponseDto>>> GetAll()
     {
         var testRuns = await _context.TestRuns
             .Include(tr => tr.TestCase)
