@@ -16,6 +16,10 @@ public enum TestRunStatus
     // no result received within expected time frame
     TimedOut
 }
+
+/// <summary>
+/// TestRun model represents a single execution of a test case, with actual results and status
+/// </summary>
 public class TestRun
 {
     public Guid Id { get; set; }
@@ -23,8 +27,9 @@ public class TestRun
     public Guid TestCaseId { get; set; }
     // e.g: Pending, Running, Completed, Failed, etc. could be replaced with an enum
     public TestRunStatus Status { get; set; } = TestRunStatus.Pending;
-    // when the test run started and finished
+    // when the test run started
     public DateTime? StartedAt { get; set; }
+    // when the test result is received and written 
     public DateTime? FinishedAt { get; set; }
     // actual observed result from the test run, to be compared with expected results in TestCase
     public bool? ActualTrip { get; set; }
