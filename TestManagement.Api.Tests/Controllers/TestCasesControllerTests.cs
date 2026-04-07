@@ -64,8 +64,8 @@ public class TestCasesControllerTests
         // assert
         // verify that the result is an OkObjectResult
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        // verify that the value of the OkObjectResult is an IEnumerable<TestCase>
-        var testCases = Assert.IsAssignableFrom<IEnumerable<TestCase>>(okResult.Value);
+        // verify that the value of the OkObjectResult is an IEnumerable<TestCaseResponseDto>
+        var testCases = Assert.IsAssignableFrom<IEnumerable<TestCaseResponseDto>>(okResult.Value);
         Assert.Equal(2, testCases.Count());
     }
 
@@ -99,7 +99,7 @@ public class TestCasesControllerTests
         
         // assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var testCaseFound = Assert.IsType<TestCase>(okResult.Value);
+        var testCaseFound = Assert.IsType<TestCaseResponseDto>(okResult.Value);
         Assert.Equal(id, testCaseFound.Id);
     }
 
@@ -253,7 +253,7 @@ public class TestCasesControllerTests
 
         // Assert
         var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
-        var createdTestCase = Assert.IsType<TestCase>(createdResult.Value);
+        var createdTestCase = Assert.IsType<TestCaseResponseDto>(createdResult.Value);
 
         // verify that the action name in the CreatedAtActionResult is correct
         // Console.WriteLine($"Output of nameof(TestCasesController.GetById): {nameof(TestCasesController.GetById)}");
