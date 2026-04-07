@@ -1,5 +1,8 @@
 namespace TestManagement.Api.Dtos;
 
+/// <summary>
+/// DTO for updating the result of a test run after it has been executed.
+/// </summary>
 public class UpdateTestRunResultDto
 {
     public bool ActualTrip { get; set; }
