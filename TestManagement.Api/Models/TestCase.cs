@@ -7,8 +7,8 @@ public class TestCase
     public string Description { get; set; } = string.Empty;
     public string DeviceFamily { get; set; } = "SIPROTEC_5";
     // protection function being tested, eg: overcurrent, distance, Undervoltage, etc
-    public string ProtectionFunction { get; set; } = "Overcurrent";
-    public string FaultType { get; set; } = "Overcurrent";
+    public string ProtectionFunction { get; set; } = string.Empty;
+    public string FaultType { get; set; } = string.Empty;
     // threshold current where the protection should start reacting
     // current unit in A 
     public double PickupCurrent { get; set; }
