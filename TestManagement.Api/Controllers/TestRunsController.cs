@@ -32,19 +32,7 @@ public class TestRunsController : ControllerBase
             .Include(tr => tr.TestCase)
             .ToListAsync();
 
-        var response = testRuns.Select(testRun => new TestRunResponseDto
-            {
-                Id = testRun.Id,
-                TestCaseId = testRun.TestCaseId,
-                Status = testRun.Status.ToString(),
-                StartedAt = testRun.StartedAt,
-                FinishedAt = testRun.FinishedAt,
-                ActualTrip = testRun.ActualTrip,
-                ActualTripTimeMs = testRun.ActualTripTimeMs,
-                Passed = testRun.Passed,
-                ResultMessage = testRun.ResultMessage,
-                TestCaseSummary = testRun.TestCase == null ? null : new TestCaseSummaryDto(testRun.TestCase)
-            });
+        var response = testRuns.Select(testRun => new TestRunResponseDto(testRun));
 
         return Ok(response);
     }
@@ -70,19 +58,7 @@ public class TestRunsController : ControllerBase
         {
             return NotFound();
         }
-        var response = new TestRunResponseDto
-        {
-            Id = testRun.Id,
-            TestCaseId = testRun.TestCaseId,
-            Status = testRun.Status.ToString(),
-            StartedAt = testRun.StartedAt,
-            FinishedAt = testRun.FinishedAt,
-            ActualTrip = testRun.ActualTrip,
-            ActualTripTimeMs = testRun.ActualTripTimeMs,
-            Passed = testRun.Passed,
-            ResultMessage = testRun.ResultMessage,
-            TestCaseSummary = testRun.TestCase == null ? null : new TestCaseSummaryDto(testRun.TestCase)
-        };
+        var response = new TestRunResponseDto(testRun);
 
         return Ok(response);
     }
@@ -116,19 +92,7 @@ public class TestRunsController : ControllerBase
         _context.TestRuns.Add(testRun);
         await _context.SaveChangesAsync();
 
-        var response = new TestRunResponseDto
-        {
-            Id = testRun.Id,
-            TestCaseId = testRun.TestCaseId,
-            Status = testRun.Status.ToString(),
-            StartedAt = testRun.StartedAt,
-            FinishedAt = testRun.FinishedAt,
-            ActualTrip = testRun.ActualTrip,
-            ActualTripTimeMs = testRun.ActualTripTimeMs,
-            Passed = testRun.Passed,
-            ResultMessage = testRun.ResultMessage,
-            TestCaseSummary = null // Set to null or fetch the associated test case summary if needed
-        };
+        var response = new TestRunResponseDto(testRun);
 
         return CreatedAtAction(nameof(GetById), new { id = testRun.Id }, response);
     }
@@ -158,8 +122,10 @@ public class TestRunsController : ControllerBase
         testRun.Status = TestRunStatus.Completed;
         testRun.FinishedAt = DateTime.UtcNow;
 
+        var response = new TestRunResponseDto(testRun);
+
         await _context.SaveChangesAsync();
 
-        return Ok(testRun);
+        return Ok(response);
     }
 }
