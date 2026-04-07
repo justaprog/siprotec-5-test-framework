@@ -25,12 +25,15 @@ public class TestCasesController : ControllerBase
     /// returns a list of test cases in the database as HTTP 200 Ok response
     /// </returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TestCase>>> GetAll()
+    public async Task<ActionResult<IEnumerable<TestCaseResponseDto>>> GetAll()
     {
         
         // fetch all test cases from the database
         var testCases = await _context.TestCases.ToListAsync();
-        return Ok(testCases);
+
+        var testCaseDtos = testCases.Select(tc => new TestCaseResponseDto(tc));
+
+        return Ok(testCaseDtos);
     }
 
     /// <summary>
@@ -41,7 +44,7 @@ public class TestCasesController : ControllerBase
     /// returns the test case with the specified id as HTTP 200 Ok response
     /// </returns>
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<TestCase>> GetById(Guid id)
+    public async Task<ActionResult<TestCaseResponseDto>> GetById(Guid id)
     {
         var testCase = await _context.TestCases.FindAsync(id);
 
@@ -50,7 +53,7 @@ public class TestCasesController : ControllerBase
             return NotFound();
         }
 
-        return Ok(testCase);
+        return Ok(new TestCaseResponseDto(testCase));
     }
 
     /// <summary>
@@ -62,7 +65,7 @@ public class TestCasesController : ControllerBase
     /// Location header pointing to the new resource
     /// </returns>
     [HttpPost]
-    public async Task<ActionResult<TestCase>> Create(CreateTestCaseDto dto)
+    public async Task<ActionResult<TestCaseResponseDto>> Create(CreateTestCaseDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
@@ -107,7 +110,7 @@ public class TestCasesController : ControllerBase
         // return HTTP 201 Created response with the created test case and a Location header
         // the Location header points to the GetById action with the id of 
         // the newly created test case
-        return CreatedAtAction(nameof(GetById), new { id = testCase.Id }, testCase);
+        return CreatedAtAction(nameof(GetById), new { id = testCase.Id }, new TestCaseResponseDto(testCase));
     }
 
     /// <summary>
