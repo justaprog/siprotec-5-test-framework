@@ -10,5 +10,5 @@ public class TestRunResponseDto
     public int? ActualTripTimeMs { get; set; }
     public bool? Passed { get; set; }
     public string? ResultMessage { get; set; }
-    public TestCaseSummaryDto? TestCase { get; set; }
+    public TestCaseSummaryDto? TestCaseSummary { get; set; }
 }
