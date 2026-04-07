@@ -203,4 +203,59 @@ public class TestRunsControllerTests
         // assert
         Assert.IsType<NotFoundResult>(result.Result);
     }
+
+    [Fact]
+    public async Task UpdateResult_ReturnsOk()
+    {
+        // arrange
+        using var context = CreateContext();
+        // create a test case
+        var testCase = new TestCase
+        {
+            Id = Guid.NewGuid(),
+            Name = "Test Case for UpdateResult",
+            PickupCurrent = 100,
+            FaultCurrent = 200,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+        // create a test run associated with the test case
+        var testRun = new TestRun
+        {
+            Id = Guid.NewGuid(),
+            TestCaseId = testCase.Id,
+            Status = TestRunStatus.Pending,
+        };
+        // save the test case and test run to the in-memory database
+        context.TestCases.Add(testCase);
+        context.TestRuns.Add(testRun);
+        await context.SaveChangesAsync();
+
+        // create controller
+        var controller = new TestRunsController(context);
+        
+        var updateDto = new UpdateTestRunResultDto
+        {
+            ActualTrip = true,
+            ActualTripTimeMs = 30,
+            Passed = true,
+            ResultMessage = "Test passed successfully"
+        };
+
+        // act
+        var result = await controller.UpdateResult(testRun.Id, updateDto);
+
+        // assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var updatedTestRun = Assert.IsType<TestRunResponseDto>(okResult.Value);
+
+        Assert.Equal(testRun.Id, updatedTestRun.Id);
+        Assert.Equal(updateDto.ActualTrip, updatedTestRun.ActualTrip);
+        Assert.Equal(updateDto.ActualTripTimeMs, updatedTestRun.ActualTripTimeMs);
+        Assert.Equal(updateDto.Passed, updatedTestRun.Passed);
+        Assert.Equal(updateDto.ResultMessage, updatedTestRun.ResultMessage);
+    }
 }
