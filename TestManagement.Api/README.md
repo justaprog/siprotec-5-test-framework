@@ -37,12 +37,14 @@ and the Swagger UI can be accessed at `http://localhost:5257/swagger`.
 ![alt text](../data/imgs//swaggerui_interface.png)
 
 ## Key Responsibilities
-- create a test case
-- list test cases
-- get one test case
-- start a test run for a given test case
-- get test run status
-- store test run results
+- list test cases/runs
+- create a test case/run
+- get one test case/run
+- delete a test case
+- update test run results
+- execute a test run (to be implemented)
+- update test run status (to be implemented)
+
 
 ## Architecture
 ### Data Models
