@@ -49,6 +49,7 @@ and the Swagger UI can be accessed at `http://localhost:5257/swagger`.
 This represents how data is stored in the database:
 - TestCase: represents the definition of a test case
 - TestRun: represents an execution of a test case
+- 
 ### Dtos
 We use Data Transfer Objects (DTOs) to decouple the API layer from the data 
 models. This allows us to have more control over the data we expose through 
@@ -56,10 +57,13 @@ the API and to perform any necessary transformations.
 This presents how data is transferred over HTTP:
 - CreateTestCaseDto: used to create a new test case
 - CreateTestRunDto: used to create a new test run
-- UpdateTestRunResultDto: used to update test run results
+- TestCaseResponseDto: used to return test case details along with a summary of its associated test runs
+- TestCaseSummaryDto: used to return a summary of a test case in the test run response
 - TestRunResponseDto: used to return test run details along with the 
 associated test case summary
-- TestCaseSummaryDto: used to return a summary of a test case in the test run response
+- TestRunSummaryDto: used to return a summary of a test run in the test case response
+- UpdateTestRunResultDto: used to update test run results
+
 ### Controllers
 Controllers define the API endpoints and handle HTTP requests. They use the services to perform business logic and return appropriate HTTP responses:
 - TestCasesController: handles endpoints related to test cases
