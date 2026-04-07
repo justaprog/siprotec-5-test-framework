@@ -78,7 +78,7 @@ public class TestRunsControllerTests
     }
 
     [Fact]
-    public async Task GetById_Ok_and_NotFound()
+    public async Task GetById_ReturnsOk_and_ReturnsNotFound()
     {
         // arrange
         using var context = CreateContext();
@@ -122,5 +122,44 @@ public class TestRunsControllerTests
         // return not found for non-existing id
         var notFoundResult = await controller.GetById(Guid.NewGuid());
         Assert.IsType<NotFoundResult>(notFoundResult.Result);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsCreatedAtAction()
+    {
+        // arrange
+        using var context = CreateContext();
+
+        var testCase = new TestCase
+        {
+            Id = Guid.NewGuid(),
+            Name = "Test Case for Create",
+            PickupCurrent = 100,
+            FaultCurrent = 200,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+        context.TestCases.Add(testCase);
+        await context.SaveChangesAsync();
+
+        var controller = new TestRunsController(context);
+
+        var createDto = new CreateTestRunDto
+        {
+            TestCaseId = testCase.Id
+        };
+
+        // act
+        var result = await controller.Create(createDto);
+
+        // assert
+        var createdAtResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+        var createdTestRun = Assert.IsType<TestRunResponseDto>(createdAtResult.Value);
+
+        Assert.Equal(createDto.TestCaseId, createdTestRun.TestCaseId);
+        Assert.Equal(TestRunStatus.Pending.ToString(), createdTestRun.Status);
     }
 }
