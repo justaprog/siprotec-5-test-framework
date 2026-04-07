@@ -18,10 +18,10 @@ Create test case → run simulation → evaluate result → store/report outcome
 The system is designed as a set of loosely coupled microservices, each responsible for a specific domain of functionality. The services communicate via RESTful APIs, allowing for scalability and maintainability. The main services include: 
 1. **Test Management Service**:
 This service manages:
-- test case definitions
-- test suites
-- execution requests
-- metadata
+- test case creation, retrieval, and deletion
+- test run creation, retrieval, and result updates
+- execution state (to be implemented)
+- links to results from other services (to be implemented)
 
 2. **Simulation Service** (to be implemented):
 This service simulates the SIPROTEC 5 power-system behavior:
