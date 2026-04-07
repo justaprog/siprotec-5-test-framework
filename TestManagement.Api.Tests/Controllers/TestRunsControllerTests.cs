@@ -21,7 +21,7 @@ public class TestRunsControllerTests
 
         return new AppDbContext(options);
     }
-
+    
     [Fact]
     public async Task GetAll_ReturnsOk_WithAllTestRuns()
     {
@@ -75,5 +75,52 @@ public class TestRunsControllerTests
         Assert.Equal(2, testRuns.Count());
         Assert.Contains(testRuns, tr => tr.Id == testRun1.Id);
         Assert.Contains(testRuns, tr => tr.Id == testRun2.Id);
+    }
+
+    [Fact]
+    public async Task GetById_Ok_and_NotFound()
+    {
+        // arrange
+        using var context = CreateContext();
+
+        var testCase = new TestCase
+        {
+            Id = Guid.NewGuid(),
+            Name = "Test Case for GetById",
+            PickupCurrent = 100,
+            FaultCurrent = 200,
+            FaultStartMs = 10,
+            TripDelayMs = 20,
+            ExpectedTrip = true,
+            ExpectedTripMinMs = 25,
+            ExpectedTripMaxMs = 35
+        };
+        context.TestCases.Add(testCase);
+
+        var testRun = new TestRun
+        {
+            Id = Guid.NewGuid(),
+            TestCaseId = testCase.Id,
+            Status = TestRunStatus.Pending,
+        };
+        context.TestRuns.Add(testRun);
+        await context.SaveChangesAsync();
+
+        var controller = new TestRunsController(context);
+
+        // act
+        var result = await controller.GetById(testRun.Id);
+
+        // assert
+        // return ok 
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var returnedTestRun = Assert.IsType<TestRunResponseDto>(okResult.Value);
+
+        Assert.Equal(testRun.Id, returnedTestRun.Id);
+        Assert.Equal(testRun.TestCaseId, returnedTestRun.TestCaseId);
+
+        // return not found for non-existing id
+        var notFoundResult = await controller.GetById(Guid.NewGuid());
+        Assert.IsType<NotFoundResult>(notFoundResult.Result);
     }
 }
