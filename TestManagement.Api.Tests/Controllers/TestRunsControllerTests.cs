@@ -181,4 +181,26 @@ public class TestRunsControllerTests
         // assert
         Assert.IsType<BadRequestObjectResult>(result.Result);
     }
+
+    [Fact]
+    public async Task UpdateResult_ReturnNotFound()
+    {
+        // arrange
+        using var context = CreateContext();
+        var controller = new TestRunsController(context);
+
+        var updateDto = new UpdateTestRunResultDto
+        {
+            ActualTrip = true,
+            ActualTripTimeMs = 30,
+            Passed = true,
+            ResultMessage = "Test passed successfully"
+        };
+
+        // act
+        var result = await controller.UpdateResult(Guid.NewGuid(), updateDto); // non-existing id
+
+        // assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
 }
