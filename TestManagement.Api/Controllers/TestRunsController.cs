@@ -43,13 +43,7 @@ public class TestRunsController : ControllerBase
                 ActualTripTimeMs = testRun.ActualTripTimeMs,
                 Passed = testRun.Passed,
                 ResultMessage = testRun.ResultMessage,
-                TestCase = testRun.TestCase == null ? null : new TestCaseSummaryDto
-                {
-                    Id = testRun.TestCase.Id,
-                    Name = testRun.TestCase.Name,
-                    DeviceFamily = testRun.TestCase.DeviceFamily,
-                    ProtectionFunction = testRun.TestCase.ProtectionFunction
-                }
+                TestCaseSummary = testRun.TestCase == null ? null : new TestCaseSummaryDto(testRun.TestCase)
             });
 
         return Ok(response);
@@ -87,13 +81,7 @@ public class TestRunsController : ControllerBase
             ActualTripTimeMs = testRun.ActualTripTimeMs,
             Passed = testRun.Passed,
             ResultMessage = testRun.ResultMessage,
-            TestCase = testRun.TestCase == null ? null : new TestCaseSummaryDto
-            {
-                Id = testRun.TestCase.Id,
-                Name = testRun.TestCase.Name,
-                DeviceFamily = testRun.TestCase.DeviceFamily,
-                ProtectionFunction = testRun.TestCase.ProtectionFunction
-            }
+            TestCaseSummary = testRun.TestCase == null ? null : new TestCaseSummaryDto(testRun.TestCase)
         };
 
         return Ok(response);
@@ -102,13 +90,13 @@ public class TestRunsController : ControllerBase
     /// <summary>
     /// Create a new test run for a given test case and save it to the database
     /// </summary>
-    /// <param name="dto"></param>
+    /// <param name="dto">The data transfer object for creating a new test run</param>
     /// <returns>
     /// returns the created test run as HTTP 201 Created response with a 
     /// Location header pointing to the new resource
     /// </returns>
     [HttpPost]
-    public async Task<ActionResult<TestRun>> Create(CreateTestRunDto dto)
+    public async Task<ActionResult<TestRunResponseDto>> Create(CreateTestRunDto dto)
     {
         // validate that the referenced test case exists in the database
         var testCaseExists = await _context.TestCases.AnyAsync(tc => tc.Id == dto.TestCaseId);
@@ -128,19 +116,33 @@ public class TestRunsController : ControllerBase
         _context.TestRuns.Add(testRun);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetById), new { id = testRun.Id }, testRun);
+        var response = new TestRunResponseDto
+        {
+            Id = testRun.Id,
+            TestCaseId = testRun.TestCaseId,
+            Status = testRun.Status.ToString(),
+            StartedAt = testRun.StartedAt,
+            FinishedAt = testRun.FinishedAt,
+            ActualTrip = testRun.ActualTrip,
+            ActualTripTimeMs = testRun.ActualTripTimeMs,
+            Passed = testRun.Passed,
+            ResultMessage = testRun.ResultMessage,
+            TestCaseSummary = null // Set to null or fetch the associated test case summary if needed
+        };
+
+        return CreatedAtAction(nameof(GetById), new { id = testRun.Id }, response);
     }
 
     /// <summary>
     /// Update the result of a test run and save the changes to the database
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="id">The ID of the test run to update</param>
     /// <param name="dto"></param>
     /// <returns>
     /// returns the updated test run as HTTP 200 Ok response
     /// </returns>
     [HttpPatch("{id:guid}/result")]
-    public async Task<ActionResult<TestRun>> UpdateResult(Guid id, UpdateTestRunResultDto dto)
+    public async Task<ActionResult<TestRunResponseDto>> UpdateResult(Guid id, UpdateTestRunResultDto dto)
     {
         var testRun = await _context.TestRuns.FindAsync(id);
 
