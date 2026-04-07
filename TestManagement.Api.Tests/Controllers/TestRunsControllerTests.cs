@@ -162,4 +162,23 @@ public class TestRunsControllerTests
         Assert.Equal(createDto.TestCaseId, createdTestRun.TestCaseId);
         Assert.Equal(TestRunStatus.Pending.ToString(), createdTestRun.Status);
     }
+
+    [Fact]
+    public async Task Create_ReturnsBadRequest_ForNonExistingTestCase()
+    {
+        // arrange
+        using var context = CreateContext();
+        var controller = new TestRunsController(context);
+
+        var createDto = new CreateTestRunDto
+        {
+            TestCaseId = Guid.NewGuid() // non-existing id
+        };
+
+        // act
+        var result = await controller.Create(createDto);
+
+        // assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+    }
 }
