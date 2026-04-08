@@ -2,7 +2,7 @@
 The Test Management Service is the coordinator of the whole framework. It manages:
 - test case creation, retrieval, and deletion
 - test run creation, retrieval, and result updates
-- execution state (to be implemented)
+- execution state
 - links to results from other services (to be implemented)
 
 ## Getting Started
