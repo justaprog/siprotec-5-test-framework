@@ -23,23 +23,23 @@ This service manages:
 - execution state
 - links to results from other services (to be implemented)
 
-1. **Simulation Service** (to be implemented):
+2. **Simulation Service** (to be implemented):
 This service simulates the SIPROTEC 5 power-system behavior:
 - generate 3-phase current/voltage signals
 - inject faults
 - return measurement streams or sampled datasets
 
-1. **Relay Logic Service** (to be implemented):
+3. **Relay Logic Service** (to be implemented):
 This service implements the relay's protection logic (simplified SIPROTEC-like device behavior):
 - consume simulated measurements
 - apply relay logic
 - emit events such as: pickup, trip, no trip
 
-1. **Validation Service** (to be implemented):
+4. **Validation Service** (to be implemented):
 This service validates the relay's response against expected outcomes:
 - compare actual results to expected results (output: pass/fail, mismatch reasons, timing deviation)
 
-1. **Reporting Service** (to be implemented):
+5. **Reporting Service** (to be implemented):
 This service stores and exposes comprehensive test reports:
 - test run results
 - event logs
