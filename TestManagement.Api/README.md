@@ -51,7 +51,7 @@ and the Swagger UI can be accessed at `http://localhost:5257/swagger`.
 This represents how data is stored in the database:
 - TestCase: represents the definition of a test case
 - TestRun: represents an execution of a test case
-- 
+
 ### Dtos
 We use Data Transfer Objects (DTOs) to decouple the API layer from the data 
 models. This allows us to have more control over the data we expose through 
