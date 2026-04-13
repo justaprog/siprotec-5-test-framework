@@ -34,6 +34,7 @@ Request body for POST /api/simulations/run:
   "durationMs": 300, # to be added in test cases
   "samplingRateHz": 1000 # to be added in test cases
 }
+```
 
 Explanation of parameters:
 - nominalCurrent = 100: Before the fault starts, each phase current is 100.
