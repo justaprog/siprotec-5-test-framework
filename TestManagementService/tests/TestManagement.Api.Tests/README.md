@@ -29,4 +29,4 @@ Run all tests from the solution root:
 ```bash
 dotnet test
 ```
-![alt text](../data/imgs/testmanagement_unittests.png)
+![alt text](/data/imgs/testmanagement_unittests.png)
