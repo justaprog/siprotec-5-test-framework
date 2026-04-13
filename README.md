@@ -59,11 +59,11 @@ For more details on the test strategy, scope, and stack for each service,
 please refer to the README file in each service's test project directory.
 
 ## Tech Stack
-- C# / .NET 8
+- C# / .NET 10
 - ASP.NET Core Web API
 - Entity Framework Core
 - PostgreSQL
-- Docker
+- Docker + Docker Compose
 - Swagger/OpenAPI for API documentation
-- xUnit for unit testing
+- xUnit for tests
 
