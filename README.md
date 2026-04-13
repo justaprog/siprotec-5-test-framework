@@ -48,6 +48,38 @@ This service stores and exposes comprehensive test reports:
 
 For more details on the functionality and implementation of each service, please go to the respective service documentation and API specifications in each service's README file.
 
+## Development
+### How to set up a a new .NET service
+1. Create a new folder for the service:
+```bash
+mkdir MyNewService
+cd MyNewService
+```
+2. Create a solution file
+```bash
+dotnet new sln --name MyNewService
+```
+3. Create src and test projects folders
+```bash
+mkdir src tests
+```
+4. Add src and test projects, e.g. for an API project and test projects:
+```bash
+dotnet new webapi -n MyNew.Api -o src/MyNew.Api --use-controllers
+dotnet new xunit -n MyNew.UnitTests  -o tests/MyNew.UnitTests
+dotnet new xunit -n MyNew.IntegrationTests  -o tests/MyNew.IntegrationTests
+```
+5. Add projects to the solution
+```bash
+dotnet sln add src/MyNew.Api/MyNew.Api.csproj
+dotnet sln add tests/MyNew.UnitTests/MyNew.UnitTests.csproj
+dotnet sln add tests/MyNew.IntegrationTests/MyNew.IntegrationTests.csproj
+```
+6. Add project references as needed, e.g. for unit tests referencing the API project:
+```bash
+dotnet add tests/MyNew.UnitTests/MyNew.UnitTests.csproj reference src/MyNew.Api/MyNew.Api.csproj
+```
+
 ## Test
 ### Unit tests
 Run unit tests for each service using the following command in the 
