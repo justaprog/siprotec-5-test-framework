@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TestManagement.Api\TestManagement.Api.csproj" />
+    <ProjectReference Include="..\..\src\TestManagement.Api\TestManagement.Api.csproj" />
   </ItemGroup>
 
 </Project>
