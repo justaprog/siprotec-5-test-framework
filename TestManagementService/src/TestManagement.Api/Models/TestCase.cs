@@ -1,38 +1,72 @@
 namespace TestManagement.Api.Models;
 
-public class TestCase
+public enum DeviceFamily
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string DeviceFamily { get; set; } = "SIPROTEC_5";
-    // protection function being tested, eg: overcurrent, distance, Undervoltage, etc
-    public string ProtectionFunction { get; set; } = string.Empty;
-    public string FaultType { get; set; } = string.Empty;
+    SIPROTEC_5
+}
+
+public enum ProtectionFunction
+{
+    Overcurrent,
+    Undervoltage,
+    Distance
+}
+
+public enum FaultType
+{
+    Overcurrent,
+    ShortCircuit,
+    GroundFault,
+    Undervoltage
+}
+
+public class SimulationSettings
+{
+    // 
+    public FaultType FaultType { get; set; } = FaultType.Overcurrent;
+    // normal current injected before the fault starts
+    public double NominalCurrent { get; set; }
     // threshold current where the protection should start reacting
-    // current unit in A 
     public double PickupCurrent { get; set; }
-    // Actual current injected during the simulated fault
+    // actual current injected during the simulated fault
     // could be higher than pickup current to ensure the protection reacts
     public double FaultCurrent { get; set; }
     // when the fault current starts being injected, in ms from the start of the test run
-    // many test cases may have some time of normal current injection before 
-    // the fault starts, to simulate real world conditions
     public int FaultStartMs { get; set; }
+    // The full simulation runs duration
+    public int DurationMs { get; set; }
+    // samples per second generated
+    public int SamplingRateHz { get; set; }
+}
+
+public class ExpectedOutcome
+{
+    // whether the test case is expected to result in a trip or not
+    public bool ExpectedTrip { get; set; }
     // how long the relay is expected to wait before tripping after the fault current is injected
     // common in overcurrent protection wher the relay does not trip immediately,
     // but only after a configured delay.
-    public int TripDelayMs { get; set; }
-    // whether the test case is expected to result in a trip or not
-    // e.g: current below pickup -> ExpectedTrip = False
-    // current above pickup long enough -> ExpectedTrip = True
-    public bool ExpectedTrip { get; set; }
+    public int? TripDelayMs { get; set; }
     // allow null values for expected trip time range if not specified
     // Minimum acceptable trip time in milliseconds
     public int? ExpectedTripMinMs { get; set; }
     // Maximum acceptable trip time in milliseconds
     // the relay should trip between ExpectedTripMinMs and ExpectedTripMaxMs after the fault starts
     public int? ExpectedTripMaxMs { get; set; }
+}
+
+public class TestCase
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+
+    public DeviceFamily DeviceFamily { get; set; } = DeviceFamily.SIPROTEC_5;
+    public ProtectionFunction ProtectionFunction { get; set; } = ProtectionFunction.Overcurrent;
+
+    SimulationSettings Simulation { get; set; } = new();
+    ExpectedOutcome ExpectedOutcome { get; set; } = new();
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     // links to test runs
