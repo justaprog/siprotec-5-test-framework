@@ -13,8 +13,8 @@ public class TestCaseResponseDto
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
 
-    public string DeviceFamily { get; set; } = string.Empty;
-    public string ProtectionFunction { get; set; } = string.Empty;
+    public string DeviceFamily { get; set; } = string.Empty; // enum in model, string in DTO for better API usability
+    public string ProtectionFunction { get; set; } = string.Empty; // enum in model, string in DTO for better API usability
 
     public SimulationSettingsResponseDto Simulation { get; set; } = new();
     public ExpectedOutcomeResponseDto ExpectedOutcome { get; set; } = new();
