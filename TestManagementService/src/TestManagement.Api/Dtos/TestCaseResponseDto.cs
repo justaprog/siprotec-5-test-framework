@@ -24,7 +24,7 @@ public class TestCaseResponseDto
     public List<TestRunSummaryDto> TestRuns { get; set; } = new();
 
     public TestCaseResponseDto(TestCase testCase)
-    {
+    { 
         Id = testCase.Id;
         Name = testCase.Name;
         Description = testCase.Description;
