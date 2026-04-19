@@ -65,8 +65,8 @@ public class TestCase
     public DeviceFamily DeviceFamily { get; set; } = DeviceFamily.SIPROTEC_5;
     public ProtectionFunction ProtectionFunction { get; set; } = ProtectionFunction.Overcurrent;
 
-    SimulationSettings Simulation { get; set; } = new();
-    ExpectedOutcome ExpectedOutcome { get; set; } = new();
+    public SimulationSettings Simulation { get; set; } = new();
+    public ExpectedOutcome ExpectedOutcome { get; set; } = new();
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     // links to test runs
