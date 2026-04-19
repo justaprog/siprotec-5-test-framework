@@ -34,13 +34,23 @@ public class TestRunsControllerTests
         {
             Id = Guid.NewGuid(),
             Name = "Test Case for GetAll",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = new SimulationSettings
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new ExpectedOutcome
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = 145,
+                ExpectedTripMaxMs = 155
+            }
         };
         context.TestCases.Add(testCase);
         
@@ -87,13 +97,23 @@ public class TestRunsControllerTests
         {
             Id = Guid.NewGuid(),
             Name = "Test Case for GetById",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = new SimulationSettings
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new ExpectedOutcome
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = 145,
+                ExpectedTripMaxMs = 155
+            }
         };
         context.TestCases.Add(testCase);
 
@@ -134,13 +154,23 @@ public class TestRunsControllerTests
         {
             Id = Guid.NewGuid(),
             Name = "Test Case for Create",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = new SimulationSettings
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new ExpectedOutcome
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = 145,
+                ExpectedTripMaxMs = 155
+            }
         };
         context.TestCases.Add(testCase);
         await context.SaveChangesAsync();
@@ -214,13 +244,23 @@ public class TestRunsControllerTests
         {
             Id = Guid.NewGuid(),
             Name = "Test Case for UpdateResult",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = new SimulationSettings
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new ExpectedOutcome
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = 145,
+                ExpectedTripMaxMs = 155
+            }
         };
         // create a test run associated with the test case
         var testRun = new TestRun

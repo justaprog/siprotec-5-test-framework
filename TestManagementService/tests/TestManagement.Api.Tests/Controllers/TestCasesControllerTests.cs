@@ -29,30 +29,55 @@ public class TestCasesControllerTests
         using var context = CreateContext();
 
         // add some test cases to the in-memory database
+        SimulationSettings simulation_1 = new SimulationSettings
+        {
+            FaultType = FaultType.Overcurrent,
+            NominalCurrent = 100,
+            PickupCurrent = 300,
+            FaultCurrent = 600,
+            FaultStartMs = 100,
+            DurationMs = 300,
+            SamplingRateHz = 1000
+        };
+        ExpectedOutcome expectedOutcome_1 = new ExpectedOutcome
+        {
+            ExpectedTrip = true,
+            TripDelayMs = 50,
+            ExpectedTripMinMs = 145,
+            ExpectedTripMaxMs = 155
+        };
         context.TestCases.Add(new TestCase
         {
             Id = Guid.NewGuid(),
             Name = "Test 1",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = simulation_1,
+            ExpectedOutcome = expectedOutcome_1
         });
+
+        SimulationSettings simulation_2 = new SimulationSettings
+        {
+            FaultType = FaultType.Overcurrent,
+            NominalCurrent = 200,
+            PickupCurrent = 500,
+            FaultCurrent = 1000,
+            FaultStartMs = 50,
+            DurationMs = 200,
+            SamplingRateHz = 2000
+        };
+        ExpectedOutcome expectedOutcome_2 = new ExpectedOutcome
+        {
+            ExpectedTrip = true,
+            TripDelayMs = 30,
+            ExpectedTripMinMs = 80,
+            ExpectedTripMaxMs = 120
+        };       
 
         context.TestCases.Add(new TestCase
         {
             Id = Guid.NewGuid(),
             Name = "Test 2",
-            PickupCurrent = 150,
-            FaultCurrent = 300,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = simulation_2,
+            ExpectedOutcome = expectedOutcome_2
         });
 
         await context.SaveChangesAsync();
@@ -76,17 +101,29 @@ public class TestCasesControllerTests
         using var context = CreateContext();
 
         var id = Guid.NewGuid();
+        SimulationSettings simulation = new SimulationSettings
+        {
+            FaultType = FaultType.Overcurrent,
+            NominalCurrent = 100,
+            PickupCurrent = 300,
+            FaultCurrent = 600,
+            FaultStartMs = 100,
+            DurationMs = 300,
+            SamplingRateHz = 1000
+        };
+        ExpectedOutcome expectedOutcome = new ExpectedOutcome
+        {
+            ExpectedTrip = true,
+            TripDelayMs = 50,
+            ExpectedTripMinMs = 145,
+            ExpectedTripMaxMs = 155
+        };
         var testCase = new TestCase
         {
             Id = id,
             Name = "Existing Test 1",
-            PickupCurrent = 100,
-            FaultCurrent = 250,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = simulation,
+            ExpectedOutcome = expectedOutcome
         };
 
         context.TestCases.Add(testCase);
@@ -124,18 +161,29 @@ public class TestCasesControllerTests
         using var context = CreateContext();
         var controller = new TestCasesController(context);
 
+        CreateSimulationSettingsDto simulation = new CreateSimulationSettingsDto
+        {
+            FaultType = FaultType.Overcurrent,
+            NominalCurrent = 100,
+            PickupCurrent = 300,
+            FaultCurrent = 600,
+            FaultStartMs = 100,
+            DurationMs = 300,
+            SamplingRateHz = 1000
+        };
+        CreateExpectedOutcomeDto expectedOutcome = new CreateExpectedOutcomeDto
+        {
+            ExpectedTrip = true,
+            TripDelayMs = 50,
+            ExpectedTripMinMs = 145,
+            ExpectedTripMaxMs = 155
+        };
         var dto = new CreateTestCaseDto
         {
             Name = "",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = simulation,
+            ExpectedOutcome = expectedOutcome
         };
-
         // Act
         var result = await controller.Create(dto);
 
@@ -151,16 +199,28 @@ public class TestCasesControllerTests
         using var context = CreateContext();
         var controller = new TestCasesController(context);
 
+        CreateSimulationSettingsDto simulation = new CreateSimulationSettingsDto
+        {
+            FaultType = FaultType.Overcurrent,
+            NominalCurrent = 100,
+            PickupCurrent = 0, // invalid value
+            FaultCurrent = 600,
+            FaultStartMs = 100,
+            DurationMs = 300,
+            SamplingRateHz = 1000
+        };
+        CreateExpectedOutcomeDto expectedOutcome = new CreateExpectedOutcomeDto
+        {
+            ExpectedTrip = true,
+            TripDelayMs = 50,
+            ExpectedTripMinMs = 145,
+            ExpectedTripMaxMs = 155
+        };
         var dto = new CreateTestCaseDto
         {
             Name = "Test Case with Invalid PickupCurrent",
-            PickupCurrent = 0,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = simulation,
+            ExpectedOutcome = expectedOutcome
         };
 
         // Act
@@ -178,16 +238,29 @@ public class TestCasesControllerTests
         using var context = CreateContext();
         var controller = new TestCasesController(context);
 
+        CreateSimulationSettingsDto simulation = new CreateSimulationSettingsDto
+        {
+            FaultType = FaultType.Overcurrent,
+            NominalCurrent = 100,
+            PickupCurrent = 300,
+            FaultCurrent = 200, // invalid value, should be greater than PickupCurrent
+            FaultStartMs = 100,
+            DurationMs = 300,
+            SamplingRateHz = 1000
+        };
+        CreateExpectedOutcomeDto expectedOutcome = new CreateExpectedOutcomeDto
+        {
+            ExpectedTrip = true,
+            TripDelayMs = 50,
+            ExpectedTripMinMs = 145,
+            ExpectedTripMaxMs = 155
+        };
+
         var dto = new CreateTestCaseDto
         {
             Name = "Test Case with Invalid FaultCurrent",
-            PickupCurrent = 100,
-            FaultCurrent = 50,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = simulation,
+            ExpectedOutcome = expectedOutcome
         };
 
         // Act
@@ -208,13 +281,23 @@ public class TestCasesControllerTests
         var dto = new CreateTestCaseDto
         {
             Name = "Test Case with Missing Expected Trip Time Window",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = null,
-            ExpectedTripMaxMs = null
+            Simulation = new CreateSimulationSettingsDto
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new CreateExpectedOutcomeDto
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = null,
+                ExpectedTripMaxMs = null
+            }
         };
 
         // Act
@@ -236,16 +319,23 @@ public class TestCasesControllerTests
         {
             Name = "Valid Test",
             Description = "Test description",
-            DeviceFamily = "SIPROTEC_5",
-            ProtectionFunction = "Overcurrent",
-            FaultType = "PhaseA",
-            PickupCurrent = 100,
-            FaultCurrent = 300,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = new CreateSimulationSettingsDto
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new CreateExpectedOutcomeDto
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = 145,
+                ExpectedTripMaxMs = 155
+            }
         };
 
         // Act
@@ -290,13 +380,23 @@ public class TestCasesControllerTests
         {
             Id = id,
             Name = "Test Case to Delete",
-            PickupCurrent = 100,
-            FaultCurrent = 200,
-            FaultStartMs = 10,
-            TripDelayMs = 20,
-            ExpectedTrip = true,
-            ExpectedTripMinMs = 25,
-            ExpectedTripMaxMs = 35
+            Simulation = new SimulationSettings
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new ExpectedOutcome
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = 145,
+                ExpectedTripMaxMs = 155
+            }
         };
         // add testcase to database
         context.TestCases.Add(testCase);
