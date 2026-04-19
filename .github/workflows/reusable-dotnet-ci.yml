@@ -1,0 +1,41 @@
+# reusable workflows for each microservice
+name: Reusable .NET CI
+
+on:
+  workflow_call:
+    inputs:
+      service_name:
+        required: true
+        type: string
+      working_directory:
+        required: true
+        type: string
+      solution_path:
+        required: true
+        type: string
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ inputs.working_directory }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ inputs.solution_path }}
+
+      - name: Build
+        run: dotnet build ${{ inputs.solution_path }} --no-restore #--configuration Release
+
+      - name: Test
+        run: dotnet test ${{ inputs.solution_path }} --no-build --verbosity normal #--configuration Release 
