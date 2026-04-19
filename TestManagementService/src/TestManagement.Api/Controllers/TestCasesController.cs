@@ -67,22 +67,25 @@ public class TestCasesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TestCaseResponseDto>> Create(CreateTestCaseDto dto)
     {
+        CreateSimulationSettingsDto simulation = dto.Simulation;
+        CreateExpectedOutcomeDto expectedOutcome = dto.ExpectedOutcome;
+        
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
             return BadRequest("Name is required.");
         }
 
-        if (dto.PickupCurrent <= 0)
+        if (simulation.PickupCurrent <= 0)
         {
             return BadRequest("PickupCurrent must be greater than 0.");
         }
 
-        if (dto.FaultCurrent <= dto.PickupCurrent)
+        if (simulation.FaultCurrent <= simulation.PickupCurrent)
         {
             return BadRequest("FaultCurrent must be greater than PickupCurrent.");
         }
 
-        if (dto.ExpectedTrip && (dto.ExpectedTripMinMs == null || dto.ExpectedTripMaxMs == null))
+        if (expectedOutcome.ExpectedTrip && (expectedOutcome.ExpectedTripMinMs == null || expectedOutcome.ExpectedTripMaxMs == null))
         {
             return BadRequest("Expected trip time window is required when ExpectedTrip is true.");
         }
@@ -94,14 +97,23 @@ public class TestCasesController : ControllerBase
             Description = dto.Description,
             DeviceFamily = dto.DeviceFamily,
             ProtectionFunction = dto.ProtectionFunction,
-            FaultType = dto.FaultType,
-            PickupCurrent = dto.PickupCurrent,
-            FaultCurrent = dto.FaultCurrent,
-            FaultStartMs = dto.FaultStartMs,
-            TripDelayMs = dto.TripDelayMs,
-            ExpectedTrip = dto.ExpectedTrip,
-            ExpectedTripMinMs = dto.ExpectedTripMinMs,
-            ExpectedTripMaxMs = dto.ExpectedTripMaxMs
+            Simulation = new SimulationSettings
+            {
+                FaultType = simulation.FaultType,
+                NominalCurrent = simulation.NominalCurrent,
+                PickupCurrent = simulation.PickupCurrent,
+                FaultCurrent = simulation.FaultCurrent,
+                FaultStartMs = simulation.FaultStartMs,
+                DurationMs = simulation.DurationMs,
+                SamplingRateHz = simulation.SamplingRateHz
+            },
+            ExpectedOutcome = new ExpectedOutcome
+            {
+                ExpectedTrip = expectedOutcome.ExpectedTrip,
+                TripDelayMs = expectedOutcome.TripDelayMs,
+                ExpectedTripMinMs = expectedOutcome.ExpectedTripMinMs,
+                ExpectedTripMaxMs = expectedOutcome.ExpectedTripMaxMs
+            }
         };
         // add the new test case to the database and save changes
         _context.TestCases.Add(testCase);

@@ -19,7 +19,7 @@ public class TestCaseSummaryDto
     {
         Id = testCase.Id;
         Name = testCase.Name;
-        DeviceFamily = testCase.DeviceFamily;
-        ProtectionFunction = testCase.ProtectionFunction;
+        DeviceFamily = testCase.DeviceFamily.ToString();
+        ProtectionFunction = testCase.ProtectionFunction.ToString();
      }
 }
