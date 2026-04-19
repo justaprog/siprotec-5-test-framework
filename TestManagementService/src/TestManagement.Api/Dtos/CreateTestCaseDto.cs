@@ -1,3 +1,4 @@
+using TestManagement.Api.Models;
 namespace TestManagement.Api.Dtos;
 
 // request body example:
