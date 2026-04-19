@@ -1,0 +1,23 @@
+name: Test Management Service CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "TestManagementService/**"
+      - ".github/workflows/reusable-dotnet-ci.yml"
+      - ".github/workflows/testmanagement-ci.yml"
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "TestManagementService/**"
+      - ".github/workflows/reusable-dotnet-ci.yml"
+      - ".github/workflows/testmanagement-ci.yml"
+
+jobs:
+  ci:
+    uses: ./.github/workflows/reusable-dotnet-ci.yml
+    with:
+      service_name: TestManagementService
+      working_directory: TestManagementService
+      solution_path: TestManagementService.slnx
