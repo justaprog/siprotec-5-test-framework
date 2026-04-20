@@ -32,8 +32,8 @@ dotnet ef database update
 dotnet run dev
 ```
 
-- The API will be available at `http://localhost:5257`
-and the Swagger UI can be accessed at `http://localhost:5257/swagger`.
+- The API will be available at `http://localhost:8080`
+and the Swagger UI can be accessed at `http://localhost:8080/swagger`.
 ![alt text](../data/imgs//swaggerui_interface.png)
 
 ## Key Responsibilities
