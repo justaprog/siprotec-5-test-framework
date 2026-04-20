@@ -51,7 +51,7 @@ npm run dev
 ```
 
 ## Tech Stack
-
 - **Vue 3**
 - **TypeScript**
+- **Vue Router**
 - **Fetch API**
