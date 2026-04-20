@@ -1,9 +1,8 @@
-import { API_BASE_URL } from './api'
 import type { TestRun } from '@/types/testRun'
 
 // Fetch all test runs from the test management service
 export async function getTestRuns(): Promise<TestRun[]> {
-  const response = await fetch(`${API_BASE_URL}/testruns`, {
+  const response = await fetch(`/api/testruns`, {
     headers: {
       'Content-Type': 'application/json'
     }
