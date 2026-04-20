@@ -11,6 +11,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
+// CORS: allow the Vite frontend during development
+var AllowFrontend = "_allowFrontend";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowFrontend, policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 // to debug connection string
 // make sure the connection string in appsettings.Development.json is correct and the database server is running
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -23,6 +34,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // query test runs and test cases
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -34,9 +47,12 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "v1");
     });
 
+
 }
 
 app.UseHttpsRedirection();
+// enable the CORS middleware
+app.UseCors(AllowFrontend);
 
 app.UseAuthorization();
 // map controller routes to enable API endpoints defined in controllers
