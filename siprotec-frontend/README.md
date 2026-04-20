@@ -17,7 +17,7 @@ This frontend currently focuses on the following features:
 
 - display all test cases
 - create a new test case
-- (to be implemented) delete a test case
+- delete a test case
 - start a test run
 - view test run details and execution status
 
