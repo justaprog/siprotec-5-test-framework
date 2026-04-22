@@ -31,8 +31,38 @@ public class TestCasesController : ControllerBase
         // fetch all test cases from the database
         var testCases = await _context.TestCases.ToListAsync();
 
+        // debugg
+        var id = Guid.NewGuid();
+        var testCase = new TestCase
+        {
+            Id = id,
+            Name = "Sample Test Case to debug",
+            Simulation = new SimulationSettings
+            {
+                FaultType = FaultType.Overcurrent,
+                NominalCurrent = 100,
+                PickupCurrent = 300,
+                FaultCurrent = 600,
+                FaultStartMs = 100,
+                DurationMs = 300,
+                SamplingRateHz = 1000
+            },
+            ExpectedOutcome = new ExpectedOutcome
+            {
+                ExpectedTrip = true,
+                TripDelayMs = 50,
+                ExpectedTripMinMs = 145,
+                ExpectedTripMaxMs = 155
+            }
+        };
+        // add testcase to database
+        _context.TestCases.Add(testCase);
+        await _context.SaveChangesAsync();
+
         var testCaseDtos = testCases.Select(tc => new TestCaseResponseDto(tc));
 
+        Console.WriteLine($"Fetched {testCaseDtos.Count()} test cases from the database.");
+            
         return Ok(testCaseDtos);
     }
 
