@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 // enable the CORS middleware, should be placed before UseAuthorization and 
 // MapControllers to ensure CORS headers are included in responses
 // to preflight requests and API endpoints
