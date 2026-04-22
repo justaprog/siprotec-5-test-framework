@@ -5,7 +5,8 @@ The system simulates SIPROTEC 5, a modern digital protection relay and automatio
 
 ## Deployment
 The project is currently deployed on a AWS EC2 instance.
-Check it out at: 16.171.37.10 (domain name will be used soon :D)
+
+Check it out at: [16.171.37.10 ](http://16.171.37.10) (domain name to be updated later)
 
 ## Workflow
 Create test case → run simulation → evaluate result → store/report outcome: 
