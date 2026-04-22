@@ -15,6 +15,8 @@ Create test case → run simulation → evaluate result → store/report outcome
 8. Final report is returned
 
 ## Architecture
+### Backend
+#### Microservices
 The system is designed as a set of loosely coupled microservices, each responsible for a specific domain of functionality. The services communicate via RESTful APIs, allowing for scalability and maintainability. The main services include: 
 1. **Test Management Service**:
 This service manages:
@@ -48,6 +50,24 @@ This service stores and exposes comprehensive test reports:
 
 For more details on the functionality and implementation of each service, please go to the respective service documentation and API specifications in each service's README file.
 
+#### Database
+A PostgreSQL database is used as the primary database for storing test cases, test runs, 
+and results. Each service manages its own database schema to ensure separation 
+of concerns and data integrity.
+
+### Frontend
+A Vue 3 + TypeScript frontend for the SIPROTEC 5 Test Framework.  
+It provides a simple user interface for creating test cases, starting test runs, and viewing test execution results.
+
+The frontend follows the backend workflow of the project:
+
+1. User creates a test case
+2. User starts a test run
+3. Test Management Service triggers the backend workflow
+4. Simulation, relay logic, and validation are performed by backend services
+5. Results are stored and returned
+6. User views the result in the frontend
+
 ## Development
 ### How to set up a a new .NET service
 1. Create a new folder for the service:
@@ -55,27 +75,27 @@ For more details on the functionality and implementation of each service, please
 mkdir MyNewService
 cd MyNewService
 ```
-2. Create a solution file
+1. Create a solution file
 ```bash
 dotnet new sln --name MyNewService
 ```
-3. Create src and test projects folders
+1. Create src and test projects folders
 ```bash
 mkdir src tests
 ```
-4. Add src and test projects, e.g. for an API project and test projects:
+1. Add src and test projects, e.g. for an API project and test projects:
 ```bash
 dotnet new webapi -n MyNew.Api -o src/MyNew.Api --use-controllers
 dotnet new xunit -n MyNew.UnitTests  -o tests/MyNew.UnitTests
 dotnet new xunit -n MyNew.IntegrationTests  -o tests/MyNew.IntegrationTests
 ```
-5. Add projects to the solution
+1. Add projects to the solution
 ```bash
 dotnet sln add src/MyNew.Api/MyNew.Api.csproj
 dotnet sln add tests/MyNew.UnitTests/MyNew.UnitTests.csproj
 dotnet sln add tests/MyNew.IntegrationTests/MyNew.IntegrationTests.csproj
 ```
-6. Add project references as needed, e.g. for unit tests referencing the API project:
+1. Add project references as needed, e.g. for unit tests referencing the API project:
 ```bash
 dotnet add tests/MyNew.UnitTests/MyNew.UnitTests.csproj reference src/MyNew.Api/MyNew.Api.csproj
 ```
@@ -91,11 +111,17 @@ For more details on the test strategy, scope, and stack for each service,
 please refer to the README file in each service's test project directory.
 
 ## Tech Stack
-- C# / .NET 10
-- ASP.NET Core Web API
-- Entity Framework Core
-- PostgreSQL
-- Docker + Docker Compose
-- Swagger/OpenAPI for API documentation
-- xUnit for tests
+### Backend
+- **C# / .NET 10**
+- **ASP.NET Core Web API**
+- **Entity Framework Core**
+- **PostgreSQL**
+- **Docker + Docker Compose**
+- **Swagger/OpenAPI for API documentation**
+- **xUnit for tests**
 
+### Frontend
+- **Vue 3**
+- **TypeScript**
+- **Vue Router**
+- **Fetch API**
