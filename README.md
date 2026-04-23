@@ -8,6 +8,25 @@ The project is currently deployed on a AWS EC2 instance.
 
 Check it out at: [16.171.37.10 ](http://16.171.37.10) (domain name to be updated later)
 
+### Docker Compose
+#### Prerequisites
+- Docker
+- Docker Compose
+- create a .env file in the root directory with the following content:
+    ```
+    POSTGRES_DB=your_database_name
+    POSTGRES_USER=your_database_user
+    POSTGRES_PASSWORD=your_database_password
+    ```
+
+#### Running the project
+The project is containerized using Docker, and we use Docker Compose to manage 
+the multi-container application.
+To deploy the project using Docker Compose, run from the root directory:
+```bash
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
 ## Workflow
 Create test case → run simulation → evaluate result → store/report outcome: 
 1. User creates a test case
