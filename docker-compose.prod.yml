@@ -38,7 +38,8 @@ services:
     #  - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql
-      #- /TestManagementService/src/TestManagement.Api/migration.sql:/docker-entrypoint-initdb.d/001-migration.sql:ro
+      # mount migration script to initialize db schema, will only run if db is empty
+      - ./deploy/migration.sql:/docker-entrypoint-initdb.d/001-migration.sql:ro
     # healthcheck to ensure db is ready before testmanagement starts
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -50,6 +51,7 @@ services:
 volumes:
   pgdata:
 
+#docker compose -f docker-compose.prod.yml down
 #docker compose -f docker-compose.prod.yml up -d --build
 #docker compose -f docker-compose.prod.yml ps
 #docker compose -f docker-compose.prod.yml logs -f  
