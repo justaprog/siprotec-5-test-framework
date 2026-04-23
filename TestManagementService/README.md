@@ -25,6 +25,17 @@ docker compose up -d
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
+- For production deployment, we use a migration SQL script to initialize and update 
+the database schema. To generate the migration script, run:
+```bash
+dotnet ef migrations script --project TestManagementService/src/TestManagement.Api -o deploy/migrations.sql
+```
+- To apply the migration script to the database, run:
+```bash
+docker compose -f docker-compose.prod.yml exec -T db \
+  sh -lc 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1' \
+  < deploy/ef-migrations.sql
+```
 
 ### Running the API 
 - Start the API:
