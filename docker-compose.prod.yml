@@ -11,8 +11,9 @@ services:
     restart: unless-stopped
 
   frontend:
-    build:
-      context: ./siprotec-frontend
+    #build:
+    #  context: ./siprotec-frontend
+    image: ghcr.io/justaprog/siprotec-frontend:latest
     restart: unless-stopped
 
   testmanagement:
