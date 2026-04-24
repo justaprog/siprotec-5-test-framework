@@ -21,7 +21,8 @@ function formatDate(dateString: string): string {
         <th>Expected Trip</th>
         <th>Created At</th>
         <th>Test Runs</th>
-        <th>Actions</th>
+        <th>Details</th>
+        <th>Delete</th>
       </tr>
     </thead>
 
@@ -41,6 +42,11 @@ function formatDate(dateString: string): string {
           >
             Details
           </RouterLink>
+        </td>
+        <td>
+          <button class="delete-button" @click="$emit('delete', testCase.id)">
+            Delete
+          </button>
         </td>
       </tr>
     </tbody>
@@ -71,5 +77,12 @@ function formatDate(dateString: string): string {
   color: white;
   text-decoration: none;
   border-radius: 4px;
+}
+.delete-button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  background-color: red;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>
