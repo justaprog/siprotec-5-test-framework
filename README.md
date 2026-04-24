@@ -6,7 +6,7 @@ The system simulates SIPROTEC 5, a modern digital protection relay and automatio
 ## Deployment
 The project is currently deployed on a AWS EC2 instance.
 
-Check it out at: [16.171.37.10 ](http://16.171.37.10) (domain name to be updated later)
+Check it out at: [51.20.185.168 ](http://51.20.185.168) (domain name to be updated later)
 
 ### Docker Compose
 #### Prerequisites
