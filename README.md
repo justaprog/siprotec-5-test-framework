@@ -3,10 +3,10 @@ A modular C#/.NET test platform with REST-based microservices to simulate power-
 
 The system simulates SIPROTEC 5, a modern digital protection relay and automation device developed by Siemens for medium- to high-voltage power grids, focusing on overcurrent protection. It enables automated testing of relay behavior using fault injection scenarios and validates trip responses against expected timing constraints
 
-## Deployment
+## Production Deployment with HTTPS
 The project is currently deployed on a AWS EC2 instance.
 
-Check it out at: [51.20.185.168 ](http://51.20.185.168) (domain name to be updated later)
+Check it out at: [https://youroctopus.com](https://youroctopus.com)
 
 ### Docker Compose
 #### Prerequisites
@@ -22,7 +22,33 @@ Check it out at: [51.20.185.168 ](http://51.20.185.168) (domain name to be updat
 #### Running the project
 The project is containerized using Docker, and we use Docker Compose to manage 
 the multi-container application.
-To deploy the project using Docker Compose, run from the root directory:
+
+Before generating ssl certificates, make sure:
+- The domain points to the server IP address.
+- Ports `80` and `443` are open in the server firewall / AWS Security Group.
+- The Nginx config contains the `/.well-known/acme-challenge/` location.
+- The Nginx container is running on port `80`.
+
+1. First, edit the `docker-compose.prod.yml` file to use the HTTP-only Nginx configuration located at `deploy/nginx-http-only.conf`:
+
+```bash
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+2. Then, generate SSL certificates using Certbot.
+
+```bash
+docker compose -f docker-compose.prod.yml run --rm certbot certonly \
+  --webroot \
+  --webroot-path /var/www/certbot \
+  -d yourdomain.com \
+  -d www.yourdomain.com \
+  --email your-email@example.com \
+  --agree-tos \
+  --no-eff-email
+```
+
+3. Then restart the application with the HTTPS-enabled Nginx configuration located at `deploy/nginx.conf`:
 ```bash
 docker compose -f docker-compose.prod.yml up -d --build
 ```
