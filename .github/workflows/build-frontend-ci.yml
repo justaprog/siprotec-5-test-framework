@@ -3,7 +3,16 @@ name: Build and push frontend image
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "siprotec-frontend/**"
+      - ".github/workflows/build-frontend-ci.yml"
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "siprotec-frontend/**"
+      - ".github/workflows/build-frontend-ci.yml"
 
+# final image: ghcr.io/justaprog/siprotec-frontend:latest
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: justaprog/siprotec-frontend
@@ -31,4 +40,5 @@ jobs:
         with:
           context: ./siprotec-frontend
           push: true
-          tags: ghcr.io/${{ env.IMAGE_NAME }}:latest
+          # set image tag to commit sha for traceability
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:{{ github.sha }}
