@@ -41,4 +41,4 @@ jobs:
           context: ./siprotec-frontend
           push: true
           # set image tag to commit sha for traceability
-          tags: ghcr.io/${{ env.IMAGE_NAME }}:{{ github.sha }}
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
