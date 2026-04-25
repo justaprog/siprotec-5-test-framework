@@ -39,6 +39,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./siprotec-frontend
-          push: true
+          push: ${{ github.event_name == 'push' }}
           # set image tag to commit sha for traceability
           tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
